@@ -49,7 +49,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
   # Enable with: gh variable set PUBLISH_PYPI --body true   (after adding this repo and the
-  # workflow "release.yml" as a trusted publisher for the project on pypi.org)
+  # workflow "workflow.yaml" as a trusted publisher for the project on pypi.org)
   pypi:
     needs: check-version
     if: vars.PUBLISH_PYPI == 'true'

@@ -120,7 +120,7 @@ Settings live in `~/.config/audioswitch/config.json` (Linux) or
 Bump `version` in `pyproject.toml`, commit, then `git tag vX.Y.Z && git push --tags`.
 The release workflow builds `audioswitch.exe` and creates the GitHub release; it
 also publishes to PyPI and the AUR once those are enabled (see the comments in
-[`release.yml`](.github/workflows/release.yml)).
+[`workflow.yaml`](.github/workflows/workflow.yaml)).
 
 ## License
 
