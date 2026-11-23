@@ -1,6 +1,6 @@
 # Maintainer: DeastinY <DeastinY@users.noreply.github.com>
 pkgname=audioswitch
-pkgver=0.2.0
+pkgver=0.2.1
 pkgrel=1
 pkgdesc="Hold a key to switch audio output between two devices; tray app with sidetone slider"
 arch=('any')
