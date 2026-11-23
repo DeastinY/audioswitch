@@ -30,7 +30,7 @@ A small tray app with a settings window:
 
 ## Install
 
-With [uv](https://docs.astral.sh/uv/), on Linux and Windows alike:
+**Linux or Windows, with [uv](https://docs.astral.sh/uv/):**
 
 ```sh
 uv tool install git+https://github.com/DeastinY/audioswitch
@@ -39,6 +39,14 @@ audioswitch
 ```
 
 Update with `uv tool upgrade audioswitch`, remove with `uv tool uninstall audioswitch`.
+
+**Windows, without installing anything:** download `audioswitch.exe` from the
+[latest release](https://github.com/DeastinY/audioswitch/releases/latest) and run it.
+
+**Arch Linux:** a `PKGBUILD` is in [`packaging/aur`](packaging/aur).
+
+The app starts itself at login from the first run on; untick "Start at login" in
+its window if you do not want that.
 
 ### Linux requirements
 
@@ -106,6 +114,13 @@ Closing the window keeps the app in the tray; quit from the tray menu.
 
 Settings live in `~/.config/audioswitch/config.json` (Linux) or
 `%APPDATA%\audioswitch\config.json` (Windows).
+
+## Releasing
+
+Bump `version` in `pyproject.toml`, commit, then `git tag vX.Y.Z && git push --tags`.
+The release workflow builds `audioswitch.exe` and creates the GitHub release; it
+also publishes to PyPI and the AUR once those are enabled (see the comments in
+[`release.yml`](.github/workflows/release.yml)).
 
 ## License
 

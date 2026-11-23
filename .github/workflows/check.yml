@@ -11,6 +11,8 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: uv run --with . python tests/smoke_windows.py
+      - name: Sidetone probe loads
+        run: uv run --with pycaw python tools/win_sidetone_probe.py
   linux:
     runs-on: ubuntu-latest
     steps:
