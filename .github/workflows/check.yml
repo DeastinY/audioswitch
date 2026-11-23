@@ -1,0 +1,20 @@
+name: check
+on: [push, pull_request]
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv tool install .
+      - name: Exercise the Windows backend
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: uv run --with . python tests/smoke_windows.py
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv tool install .
+      - run: uv run --with . python -c "import audioswitch.linux"
