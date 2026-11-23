@@ -1,0 +1,18 @@
+[project]
+name = "audioswitch"
+version = "0.1.0"
+description = "Hold a key to switch audio output between two devices, with a sidetone slider"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "PyQt6>=6.5",
+    "evdev>=1.6; sys_platform == 'linux'",
+]
+
+[project.gui-scripts]
+audioswitch = "audioswitch.app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
