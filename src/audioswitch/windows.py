@@ -11,6 +11,7 @@ import winreg
 from ctypes import wintypes
 from pathlib import Path
 
+from comtypes import COMError
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QSystemTrayIcon
 from pycaw.constants import DEVICE_STATE, EDataFlow, ERole
@@ -75,7 +76,7 @@ def list_sinks():
 def default_sink():
     try:
         device = AudioUtilities.GetSpeakers()
-    except OSError:  # no output device at all
+    except (OSError, COMError):  # no output device at all
         return ""
     return device.id if device else ""
 
