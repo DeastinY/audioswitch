@@ -1,0 +1,26 @@
+# Maintainer: DeastinY <DeastinY@users.noreply.github.com>
+pkgname=audioswitch
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="Hold a key to switch audio output between two devices; tray app with sidetone slider"
+arch=('any')
+url="https://github.com/DeastinY/audioswitch"
+license=('MIT')
+depends=('python' 'python-pyqt6' 'qt6-svg' 'python-evdev' 'pipewire' 'pipewire-pulse'
+         'wireplumber' 'libpulse' 'alsa-utils' 'libnotify')
+makedepends=('python-build' 'python-installer' 'python-hatchling')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd "$pkgname-$pkgver"
+  python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  python -m installer --destdir="$pkgdir" dist/*.whl
+  install -Dm644 packaging/audioswitch.desktop "$pkgdir/usr/share/applications/audioswitch.desktop"
+  install -Dm644 src/audioswitch/icon.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/audioswitch.svg"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

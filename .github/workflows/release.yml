@@ -1,0 +1,83 @@
+name: release
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Tag must match the version in pyproject.toml
+        run: grep -qx "version = \"${GITHUB_REF_NAME#v}\"" pyproject.toml
+
+  windows-exe:
+    needs: check-version
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      - name: Build audioswitch.exe
+        run: >
+          uv run --with pyinstaller --with . pyinstaller --noconfirm --onefile --noconsole
+          --name audioswitch --add-data "src/audioswitch/icon.svg;audioswitch"
+          packaging/win_entry.py
+      - name: Check the exe starts and stays up
+        shell: pwsh
+        run: |
+          $p = Start-Process dist/audioswitch.exe -ArgumentList "--hidden" -PassThru
+          Start-Sleep 10
+          if ($p.HasExited) { throw "audioswitch.exe exited with code $($p.ExitCode)" }
+          Stop-Process -Id $p.Id -Force
+      - uses: actions/upload-artifact@v7
+        with:
+          name: audioswitch-windows
+          path: dist/audioswitch.exe
+
+  github-release:
+    needs: windows-exe
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: audioswitch-windows
+      - run: gh release create "$GITHUB_REF_NAME" audioswitch.exe --title "$GITHUB_REF_NAME" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  # Enable with: gh variable set PUBLISH_PYPI --body true   (after adding this repo and the
+  # workflow "release.yml" as a trusted publisher for the project on pypi.org)
+  pypi:
+    needs: check-version
+    if: vars.PUBLISH_PYPI == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      - run: uv build
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  # Enable with: gh variable set PUBLISH_AUR --body true   (after storing the AUR SSH key as
+  # the secret AUR_SSH_PRIVATE_KEY)
+  aur:
+    needs: check-version
+    if: vars.PUBLISH_AUR == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: sed -i "s/^pkgver=.*/pkgver=${GITHUB_REF_NAME#v}/; s/^pkgrel=.*/pkgrel=1/" packaging/aur/PKGBUILD
+      - uses: KSXGitHub/github-actions-deploy-aur@v4.2.0
+        with:
+          pkgname: audioswitch
+          pkgbuild: packaging/aur/PKGBUILD
+          updpkgsums: true
+          commit_username: DeastinY
+          commit_email: DeastinY@users.noreply.github.com
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: "Update to ${{ github.ref_name }}"

@@ -42,7 +42,13 @@ def save_config(cfg):
 class Window(QWidget):
     def __init__(self):
         super().__init__()
+        first_run = not CONFIG.exists()
         self.cfg = load_config()
+        if first_run:  # a hotkey app is no use unless it is running, so default to on
+            save_config(self.cfg)
+            backend.set_autostart(True)
+        elif backend.autostart_enabled():
+            backend.set_autostart(True)  # refresh the entry in case the install path changed
         self.capturing = False
         self.fired = False
         self.sidetone_device = None

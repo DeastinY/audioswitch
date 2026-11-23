@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Audio Switch
+Comment=Hold a key to switch audio output
+Exec=audioswitch
+Icon=audioswitch
+Categories=AudioVideo;Audio;Settings;

@@ -126,10 +126,17 @@ def set_sidetone(device, percent, on):
 
 # --- start at login / launcher ---------------------------------------------
 
-def _command(*args):
+def _program():
+    """(executable, arguments) that start this app, however it was installed."""
+    if getattr(sys, "frozen", False):  # standalone .exe
+        return sys.executable, ""
     exe = shutil.which(APP)
-    base = f'"{exe}"' if exe else f'"{sys.executable}" -m {APP}'
-    return " ".join([base, *args])
+    return (exe, "") if exe else (sys.executable, f"-m {APP}")
+
+
+def _command(*args):
+    exe, base_args = _program()
+    return " ".join(filter(None, [f'"{exe}"', base_args, *args]))
 
 
 def autostart_enabled():
@@ -158,9 +165,7 @@ def install_launcher():
     menu = Path(os.environ["APPDATA"]) / "Microsoft/Windows/Start Menu/Programs"
     path = menu / "Audio Switch.lnk"
     shortcut = comtypes.client.CreateObject("WScript.Shell").CreateShortcut(str(path))
-    exe = shutil.which(APP)
-    shortcut.TargetPath = exe or sys.executable
-    shortcut.Arguments = "" if exe else f"-m {APP}"
+    shortcut.TargetPath, shortcut.Arguments = _program()
     shortcut.Save()
     return path
 
