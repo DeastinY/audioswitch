@@ -1,7 +1,7 @@
 # audioswitch
 
 [![check](https://github.com/DeastinY/audioswitch/actions/workflows/check.yml/badge.svg)](https://github.com/DeastinY/audioswitch/actions/workflows/check.yml)
-[![version](https://img.shields.io/github/v/tag/DeastinY/audioswitch?label=version&sort=semver)](https://github.com/DeastinY/audioswitch/tags)
+[![PyPI](https://img.shields.io/pypi/v/audioswitch)](https://pypi.org/project/audioswitch/)
 ![python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![linux](https://img.shields.io/badge/Linux-PipeWire-FCC624?logo=linux&logoColor=black)
 ![windows](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D6)
@@ -33,7 +33,7 @@ A small tray app with a settings window:
 **Linux or Windows, with [uv](https://docs.astral.sh/uv/):**
 
 ```sh
-uv tool install git+https://github.com/DeastinY/audioswitch
+uv tool install audioswitch
 audioswitch --install-launcher   # optional: add it to the application / Start menu
 audioswitch
 ```
