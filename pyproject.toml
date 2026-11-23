@@ -5,11 +5,21 @@ description = "Hold a key to switch audio output between two devices, with a sid
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
+keywords = ["audio", "headset", "headphones", "sidetone", "hotkey", "pipewire", "output-switcher", "tray"]
+classifiers = [
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Sound/Audio",
+]
 dependencies = [
     "PyQt6>=6.5",
     "evdev>=1.6; sys_platform == 'linux'",
     "pycaw>=20251023; sys_platform == 'win32'",
 ]
+
+[project.urls]
+Repository = "https://github.com/DeastinY/audioswitch"
 
 [project.gui-scripts]
 audioswitch = "audioswitch.app:main"

@@ -142,7 +142,7 @@ def autostart_enabled():
 
 
 def set_autostart(enabled):
-    with winreg.OpenKey(winreg.HKEY_CURRENT_USER, RUN_KEY, 0, winreg.KEY_SET_VALUE) as key:
+    with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, RUN_KEY, 0, winreg.KEY_SET_VALUE) as key:
         if enabled:
             winreg.SetValueEx(key, APP, 0, winreg.REG_SZ, _command("--hidden"))
         else:
